@@ -35,7 +35,7 @@ class PressPage extends StatelessWidget {
           onTap: () {
             print(Provider.of<PointsProvider>(context).points);
           },
-          onPanUpdate: (details){
+          onPanUpdate: (details) {
             print(
               details.globalPosition.dx.toString() + "    " + details.globalPosition.dy.toString(),
             );
@@ -62,11 +62,17 @@ class MainPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    canvas.drawPoints(
-      PointMode.points,
-      Provider.of<PointsProvider>(context).points,
-      _paint,
-    );
+    List<Offset> points = Provider.of<PointsProvider>(context).points;
+    for (var i = 0; i < points.length - 1; i++) {
+      Offset firstPoint = points[i];
+      Offset secondPoint = points[i + 1];
+      double xDeviation = (secondPoint.dx-firstPoint.dx)*-1;
+      double yDeviation = (secondPoint.dy-firstPoint.dy)*-1;
+      if (xDeviation>20.0||yDeviation>20.0) {
+        i++;
+      }
+      canvas.drawLine(points[i], points[i + 1], _paint);
+    }
   }
 
   @override
@@ -78,11 +84,10 @@ class MainPainter extends CustomPainter {
 class MyHomePage extends StatelessWidget {
   final Paint _paint = new Paint()
     ..color = Colors.blueAccent
-    ..strokeWidth = 10.0
+    ..strokeWidth = 2.0
     ..isAntiAlias = false
     ..filterQuality = FilterQuality.none
     ..strokeCap = StrokeCap.round;
-
 
   MyHomePage();
 
@@ -91,7 +96,7 @@ class MyHomePage extends StatelessWidget {
     return Scaffold(
       body: Container(
         child: CustomPaint(
-          painter: MainPainter(_paint,context),
+          painter: MainPainter(_paint, context),
         ),
       ),
     );

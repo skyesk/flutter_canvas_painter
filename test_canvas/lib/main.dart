@@ -27,6 +27,12 @@ class MyApp extends StatelessWidget {
 }
 
 class PressPage extends StatelessWidget {
+  final Paint _paint = new Paint()
+    ..color = Colors.blueAccent
+    ..strokeWidth = 2.0
+    ..isAntiAlias = false
+    ..filterQuality = FilterQuality.none
+    ..strokeCap = StrokeCap.round;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,22 +50,21 @@ class PressPage extends StatelessWidget {
         ],
       ),
       body: Container(
-        child: GestureDetector(
-          onTap: () {
-            print(Provider.of<PointsProvider>(context).points);
-          },
-          onPanUpdate: (details) {
-            print(
-              details.globalPosition.dx.toString() + "    " + details.globalPosition.dy.toString(),
-            );
-            Provider.of<PointsProvider>(context).addPoint(
-              Offset(
-                details.globalPosition.dx,
-                details.globalPosition.dy - 90.0, //加了appbar以后要会往下推，所以要补齐
-              ),
-            );
-          },
-          child: CanvasAndPainter(),
+        child: CustomPaint(
+          child: GestureDetector(
+            onPanUpdate: (details) {
+              print(
+                details.globalPosition.dx.toString() + "    " + details.globalPosition.dy.toString(),
+              );
+              Provider.of<PointsProvider>(context).addPoint(
+                Offset(
+                  details.globalPosition.dx,
+                  details.globalPosition.dy - 90.0, //加了appbar以后要会往下推，所以要补齐
+                ),
+              );
+            },
+          ),
+          painter: MainCanvas(_paint, context),
         ),
       ),
     );
@@ -107,10 +112,8 @@ class CanvasAndPainter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        child: CustomPaint(
-          painter: MainCanvas(_paint, context),
-        ),
+      body: CustomPaint(
+        painter: MainCanvas(_paint, context),
       ),
     );
   }

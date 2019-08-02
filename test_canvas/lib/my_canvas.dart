@@ -3,19 +3,50 @@ import 'package:provider/provider.dart';
 import './privider_points.dart';
 
 class CanvasDialog extends Dialog {
-  
   @override
   Widget build(BuildContext context) {
-    return new Material( //创建透明层
+    return new Material(
+      //创建透明层
       type: MaterialType.transparency, //透明类型
-      child: myCanvas(context)
+      child: Stack(
+        children: <Widget>[
+          myCanvas(context),
+          Positioned(
+            left: 0.0,
+            top: 20.0,
+            child: MaterialButton(
+              child: Icon(
+                Icons.chevron_left,
+                size: 50.0,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ),
+          Positioned(
+            right: 0.0,
+            top: 20.0,
+            child: MaterialButton(
+              child: Icon(
+                Icons.delete_forever,
+                size: 50.0,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                Provider.of<PointsProvider>(context).clearPoints();
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
 
-
-Widget myCanvas(BuildContext context)  {
-    final Paint _paint = new Paint()
+Widget myCanvas(BuildContext context) {
+  final Paint _paint = new Paint()
     ..color = Colors.blueAccent
     ..strokeWidth = 2.0
     ..isAntiAlias = false
@@ -31,7 +62,7 @@ Widget myCanvas(BuildContext context)  {
           Provider.of<PointsProvider>(context).addPoint(
             Offset(
               details.globalPosition.dx,
-              details.globalPosition.dy-40, //加了appbar以后要会往下推，所以要补齐
+              details.globalPosition.dy - 40, //加了appbar以后要会往下推，所以要补齐
             ),
           );
         },

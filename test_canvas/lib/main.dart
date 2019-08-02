@@ -55,23 +55,23 @@ class PressPage extends StatelessWidget {
             Provider.of<PointsProvider>(context).addPoint(
               Offset(
                 details.globalPosition.dx,
-                details.globalPosition.dy-90.0,//加了appbar以后要会往下推，所以要补齐
+                details.globalPosition.dy - 90.0, //加了appbar以后要会往下推，所以要补齐
               ),
             );
           },
-          child: MyHomePage(),
+          child: CanvasAndPainter(),
         ),
       ),
     );
   }
 }
 
-class MainPainter extends CustomPainter {
+class MainCanvas extends CustomPainter {
   final Paint _paint;
   //final List<Offset> _points;
   final BuildContext context;
 
-  MainPainter(this._paint, this.context);
+  MainCanvas(this._paint, this.context);
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -94,7 +94,7 @@ class MainPainter extends CustomPainter {
   }
 }
 
-class MyHomePage extends StatelessWidget {
+class CanvasAndPainter extends StatelessWidget {
   final Paint _paint = new Paint()
     ..color = Colors.blueAccent
     ..strokeWidth = 2.0
@@ -102,14 +102,14 @@ class MyHomePage extends StatelessWidget {
     ..filterQuality = FilterQuality.none
     ..strokeCap = StrokeCap.round;
 
-  MyHomePage();
+  CanvasAndPainter();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
         child: CustomPaint(
-          painter: MainPainter(_paint, context),
+          painter: MainCanvas(_paint, context),
         ),
       ),
     );

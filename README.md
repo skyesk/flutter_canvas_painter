@@ -1,4 +1,4 @@
 # flutter_canvas_painter
-## 一个用canvas+painter+privider实现的画板
+## 一个用canvas+painter+privider实现的半透明草稿纸效果
 写的项目需要实现草稿纸效果，但没找到合适的，就用canvas+painter+provider自己实现了一个简单的demo
 - ![test](./1.jpeg)

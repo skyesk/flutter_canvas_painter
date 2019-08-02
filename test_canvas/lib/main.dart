@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import './privider_points.dart';
 import 'dart:ui';
+import './home_page.dart';
+import './my_canvas.dart';
 
 void main() => runApp(MyApp());
 
@@ -20,7 +22,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: PressPage(),
+        home: HomePage(),
       ),
     );
   }
@@ -49,31 +51,32 @@ class PressPage extends StatelessWidget {
           )
         ],
       ),
-      body: Container(
-        child: CustomPaint(
-          child: GestureDetector(
-            onPanUpdate: (details) {
-              print(
-                details.globalPosition.dx.toString() + "    " + details.globalPosition.dy.toString(),
-              );
-              Provider.of<PointsProvider>(context).addPoint(
-                Offset(
-                  details.globalPosition.dx,
-                  details.globalPosition.dy - 90.0, //加了appbar以后要会往下推，所以要补齐
-                ),
-              );
-            },
-          ),
-          painter: MainCanvas(_paint, context),
-        ),
-      ),
+      body: myCanvas(context),
+      // body: Container(
+      //   color: Colors.green,
+      //   child: CustomPaint(
+      //     child: GestureDetector(
+      //       onPanUpdate: (details) {
+      //         print(
+      //           details.globalPosition.dx.toString() + "    " + details.globalPosition.dy.toString(),
+      //         );
+      //         Provider.of<PointsProvider>(context).addPoint(
+      //           Offset(
+      //             details.globalPosition.dx,
+      //             details.globalPosition.dy - 100.0, //加了appbar以后要会往下推，所以要补齐
+      //           ),
+      //         );
+      //       },
+      //     ),
+      //     painter: MainCanvas(_paint, context),
+      //   ),
+      // ),
     );
   }
 }
 
 class MainCanvas extends CustomPainter {
   final Paint _paint;
-  //final List<Offset> _points;
   final BuildContext context;
 
   MainCanvas(this._paint, this.context);
@@ -81,12 +84,12 @@ class MainCanvas extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     List<Offset> points = Provider.of<PointsProvider>(context).points;
-    for (var i = 0; i < points.length - 1; i++) {
+    for (var i = 0; i < points.length - 2; i++) {
       Offset firstPoint = points[i];
       Offset secondPoint = points[i + 1];
       double xDeviation = (secondPoint.dx - firstPoint.dx) * -1;
       double yDeviation = (secondPoint.dy - firstPoint.dy) * -1;
-      if (xDeviation > 20.0 || yDeviation > 20.0) {
+      if (xDeviation > 40.0 || yDeviation > 40.0) {
         i++;
       }
       canvas.drawLine(points[i], points[i + 1], _paint);
@@ -96,25 +99,5 @@ class MainCanvas extends CustomPainter {
   @override
   bool shouldRepaint(CustomPainter oldDelegate) {
     return true;
-  }
-}
-
-class CanvasAndPainter extends StatelessWidget {
-  final Paint _paint = new Paint()
-    ..color = Colors.blueAccent
-    ..strokeWidth = 2.0
-    ..isAntiAlias = false
-    ..filterQuality = FilterQuality.none
-    ..strokeCap = StrokeCap.round;
-
-  CanvasAndPainter();
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: CustomPaint(
-        painter: MainCanvas(_paint, context),
-      ),
-    );
   }
 }

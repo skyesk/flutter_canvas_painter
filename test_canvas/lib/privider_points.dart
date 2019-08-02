@@ -9,4 +9,9 @@ class PointsProvider with ChangeNotifier {
     points.add(point);
     notifyListeners();
   }
+
+  void clearPoints(){
+    points.clear();
+    notifyListeners();
+  }
 }

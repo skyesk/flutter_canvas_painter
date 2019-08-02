@@ -30,6 +30,19 @@ class PressPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("画板demo"),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.cached,
+            ),
+            onPressed: () {
+              Provider.of<PointsProvider>(context).clearPoints();
+            },
+          )
+        ],
+      ),
       body: Container(
         child: GestureDetector(
           onTap: () {
@@ -42,7 +55,7 @@ class PressPage extends StatelessWidget {
             Provider.of<PointsProvider>(context).addPoint(
               Offset(
                 details.globalPosition.dx,
-                details.globalPosition.dy,
+                details.globalPosition.dy-90.0,//加了appbar以后要会往下推，所以要补齐
               ),
             );
           },
@@ -66,9 +79,9 @@ class MainPainter extends CustomPainter {
     for (var i = 0; i < points.length - 1; i++) {
       Offset firstPoint = points[i];
       Offset secondPoint = points[i + 1];
-      double xDeviation = (secondPoint.dx-firstPoint.dx)*-1;
-      double yDeviation = (secondPoint.dy-firstPoint.dy)*-1;
-      if (xDeviation>20.0||yDeviation>20.0) {
+      double xDeviation = (secondPoint.dx - firstPoint.dx) * -1;
+      double yDeviation = (secondPoint.dy - firstPoint.dy) * -1;
+      if (xDeviation > 20.0 || yDeviation > 20.0) {
         i++;
       }
       canvas.drawLine(points[i], points[i + 1], _paint);

@@ -52,25 +52,6 @@ class PressPage extends StatelessWidget {
         ],
       ),
       body: myCanvas(context),
-      // body: Container(
-      //   color: Colors.green,
-      //   child: CustomPaint(
-      //     child: GestureDetector(
-      //       onPanUpdate: (details) {
-      //         print(
-      //           details.globalPosition.dx.toString() + "    " + details.globalPosition.dy.toString(),
-      //         );
-      //         Provider.of<PointsProvider>(context).addPoint(
-      //           Offset(
-      //             details.globalPosition.dx,
-      //             details.globalPosition.dy - 100.0, //加了appbar以后要会往下推，所以要补齐
-      //           ),
-      //         );
-      //       },
-      //     ),
-      //     painter: MainCanvas(_paint, context),
-      //   ),
-      // ),
     );
   }
 }

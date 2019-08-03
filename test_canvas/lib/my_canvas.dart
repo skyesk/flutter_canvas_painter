@@ -56,13 +56,13 @@ Widget myCanvas(BuildContext context) {
     child: CustomPaint(
       child: GestureDetector(
         onPanUpdate: (details) {
-          print(
-            details.globalPosition.dx.toString() + "    " + details.globalPosition.dy.toString(),
-          );
+          // print(
+          //   details.globalPosition.dx.toString() + "    " + details.globalPosition.dy.toString(),
+          // );
           Provider.of<PointsProvider>(context).addPoint(
             Offset(
               details.globalPosition.dx,
-              details.globalPosition.dy - 40, //加了appbar以后要会往下推，所以要补齐
+              details.globalPosition.dy - 40, //补齐偏移现象
             ),
           );
         },
@@ -84,11 +84,13 @@ class MainCanvas extends CustomPainter {
     for (var i = 0; i < points.length - 2; i++) {
       Offset firstPoint = points[i];
       Offset secondPoint = points[i + 1];
-      double xDeviation = (secondPoint.dx - firstPoint.dx) * -1;
-      double yDeviation = (secondPoint.dy - firstPoint.dy) * -1;
-      if (xDeviation > 40.0 || yDeviation > 40.0) {
+      double xDeviation = (secondPoint.dx - firstPoint.dx).abs();
+      double yDeviation = (secondPoint.dy - firstPoint.dy).abs();
+      // print(xDeviation.toString() + "    " + yDeviation.toString());
+      if (xDeviation > 20.0||yDeviation > 20.0) {
         i++;
       }
+    
       canvas.drawLine(points[i], points[i + 1], _paint);
     }
   }
